@@ -1,0 +1,38 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@io_bazel_rules_docker//container:container.bzl", "container_image")
+load("@io_bazel_rules_docker//container:container.bzl", "container_push")
+
+go_library(
+    name = "api_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/schoren/example-bazel-containers-hasher/cmd/api",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@com_github_gorilla_mux//:mux",
+        "@org_golang_x_crypto//bcrypt",
+    ],
+)
+
+go_binary(
+    name = "api",
+    embed = [":api_lib"],
+    visibility = ["//visibility:public"],
+)
+
+# 生成Docker镜像
+container_image(
+    name = "image",
+    base = "@alpine_linux_amd64//image",
+    entrypoint = ["/api"],
+    files = [":api"],
+    repository = "tx7do",
+)
+
+# 推送到DockerHub
+container_push(
+    name = "image-push",
+    format = "Docker",
+    image = ":image",
+    registry = "index.docker.io",
+    repository = "tx7do/bazel-hasher",
+)
