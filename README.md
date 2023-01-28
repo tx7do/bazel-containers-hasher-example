@@ -1,6 +1,8 @@
-# bazel-containers-hasher-example
+# 使用Bazel将golang应用程序打包成Docker镜像
 
-使用Bazel将golang应用程序打包成Docker镜像
+文章请见：<https://juejin.cn/post/7193268970881810489>
+
+## 相关命令
 
 - 初始化Bazel依赖项
 
