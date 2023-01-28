@@ -5,7 +5,7 @@ load("@io_bazel_rules_docker//container:container.bzl", "container_push")
 go_library(
     name = "api_lib",
     srcs = ["main.go"],
-    importpath = "github.com/schoren/example-bazel-containers-hasher/cmd/api",
+    importpath = "github.com/tx7do/bazel-containers-hasher-example/cmd/api",
     visibility = ["//visibility:private"],
     deps = [
         "@com_github_gorilla_mux//:mux",
