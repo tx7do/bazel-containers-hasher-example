@@ -1,0 +1,1 @@
+# bazel-containers-hasher-example
