@@ -2,6 +2,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 load("@io_bazel_rules_docker//container:container.bzl", "container_push")
 
+# 生成GO库
 go_library(
     name = "api_lib",
     srcs = ["main.go"],
@@ -13,6 +14,7 @@ go_library(
     ],
 )
 
+# 生成GO二进制文件
 go_binary(
     name = "api",
     embed = [":api_lib"],
@@ -24,15 +26,28 @@ container_image(
     name = "image",
     base = "@alpine_linux_amd64//image",
     entrypoint = ["/api"],
-    files = [":api"],
+    directory = "/app/cmd",
+    ## 需要打包进镜像去的文件
+    files = [
+        ":api",
+        "//:configs",
+    ],
+    # 资源库的用户名
     repository = "tx7do",
 )
 
 # 推送到DockerHub
+# 最终产生的镜像，拉取命令为：docker pull tx7do/bazel-hasher:latest
 container_push(
     name = "image-push",
+    # 镜像的格式，可选项：Docker、OCI；默认为：Docker。
     format = "Docker",
+    # 要被推送的镜像
     image = ":image",
+    # 镜像库的注册链接
     registry = "index.docker.io",
+    ## 目标镜像库中的镜像名
     repository = "tx7do/bazel-hasher",
+    # 镜像标签
+    tag = "latest",
 )

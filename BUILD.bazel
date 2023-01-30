@@ -3,3 +3,10 @@ load("@bazel_gazelle//:def.bzl", "gazelle")
 ## This is a gazelle annotation, change the package
 # gazelle:prefix github.com/tx7do/bazel-containers-hasher-example
 gazelle(name = "gazelle")
+
+# 把配置文件包装成文件组，以供打包时候用。
+filegroup(
+    name = "configs",
+    srcs = glob(["cmd/conf/**"]),
+    visibility = ["//visibility:public"],
+)
