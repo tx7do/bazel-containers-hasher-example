@@ -34,7 +34,7 @@
     bazel build //cmd/api:image
     ```
 
-- 构建并导入Docker镜像（等同于docker load）
+- 构建tar文件并导入为Docker镜像（等同于docker load）
 
     ```bash
     bazel run //cmd/api:image

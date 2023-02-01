@@ -1,6 +1,5 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
-load("@io_bazel_rules_docker//container:container.bzl", "container_image")
-load("@io_bazel_rules_docker//container:container.bzl", "container_push")
+load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
 
 # 生成GO库
 go_library(
@@ -23,15 +22,25 @@ go_binary(
 
 # 生成Docker镜像
 container_image(
+    # 镜像名，可用于：编译目标名，镜像标签。
     name = "image",
     base = "@alpine_linux_amd64//image",
-    entrypoint = ["/api"],
+
+    # https://docs.docker.com/engine/reference/builder/#entrypoint
+    entrypoint = ["./api"],
+
+    # 存放files/tars/debs文件的路径
     directory = "/app/cmd",
-    ## 需要打包进镜像去的文件
+
+    # https://docs.docker.com/engine/reference/builder/#workdir
+    workdir = "/app/cmd",
+
+    # 需要打包进镜像去的文件
     files = [
         ":api",
         "//:configs",
     ],
+
     # 资源库的用户名
     repository = "tx7do",
 )
